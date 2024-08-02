@@ -14,12 +14,6 @@ export default async function handler(req, res) {
     return;
   }
 
-  let toastMessage = "Starting report generation...";
-
-  const updateToastMessage = (message) => {
-    toastMessage = message;
-  };
-
   try {
     const reportData = await generateReport(url);
 
