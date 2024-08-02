@@ -21,11 +21,7 @@ export default function Analyze() {
   const [isLoading, setIsLoading] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const router = useRouter();
-
-   const setToastMessageAndOpen = (message) => {
-    setToastMessage(message);
-    setToastOpen(true);
-  };
+  const [toastMessage, setToastMessage] = useState("Website analysis in progress...");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,31 +41,26 @@ export default function Analyze() {
     
 
     try {
-      const eventSource = new EventSource(`/api/reports/generate?url=${encodeURIComponent(url)}`);
+      const response = await fetch("/api/reports/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
 
-      eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.message) {
-          setToastMessageAndOpen(data.message);
-        } else if (data.reportId) {
-          setToastMessageAndOpen("Analysis complete!");
-          eventSource.close();
-          router.push(`/report/${data.reportId}`);
-        }
-      };
+      const result = await response.json();
 
-      eventSource.onerror = (error) => {
-        setToastMessageAndOpen("An error occurred during analysis.");
-        eventSource.close();
-        setIsLoading(false);
-      };
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to generate report");
+      }
+
+      router.push(`/report/${result.reportId}`);
     } catch (err) {
       console.error("Unexpected error:", err);
       setError("Unexpected error occurred. Please try again.");
-      setIsLoading(false);
     }
   };
-
 
 
   const ResultCard = ({ title, children }) => (
