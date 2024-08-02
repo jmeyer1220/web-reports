@@ -20,6 +20,8 @@ export default function Analyze() {
   const [crawledUrls, setCrawledUrls] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
+  const router = useRouter();
+  const [toastMessage, setToastMessage] = useState("Website analysis in progress...");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ export default function Analyze() {
     setIsLoading(true);
     setToastOpen(true);
     setPageCount(null);
+    setToastMessage("Starting website analysis...");
     setCms([]);
     setHosting([]);
     setOtherTechnologies([]);
@@ -35,6 +38,8 @@ export default function Analyze() {
     setTrackingTags({});
     setCrawledUrls([]); // Reset crawled URLs
     setIsAnalyzed(false);
+    
+
     try {
       const response = await fetch("/api/reports/generate", {
         method: "POST",
@@ -69,7 +74,7 @@ export default function Analyze() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-200">
       <div className="bg-slate-100 p-8 rounded shadow-md w-full max-w-4xl">
         <h1 className="text-4xl font-bold mb-4 text-center text-gray-800">
-          Analyze a website:
+          Generate a web report:
         </h1>
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="flex items-center space-x-2">
@@ -188,7 +193,7 @@ export default function Analyze() {
       <ToastNotification
         open={toastOpen}
         setOpen={setToastOpen}
-        message="Website analysis in progress..."
+        message={toastMessage}
       />
     </div>
   );

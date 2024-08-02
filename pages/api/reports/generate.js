@@ -7,11 +7,18 @@ export default async function handler(req, res) {
     return;
   }
 
+  
   const { url } = req.body;
   if (!url) {
     res.status(400).json({ message: "URL is required" });
     return;
   }
+
+  let toastMessage = "Starting report generation...";
+
+  const updateToastMessage = (message) => {
+    toastMessage = message;
+  };
 
   try {
     const reportData = await generateReport(url);

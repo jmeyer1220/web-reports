@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import supabase from "../../supabase";
+import { supabase } from "../../supabase";
 
 export default function Report() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function Report() {
   }
 
   const { url, analyzed_at, data } = report;
-  const { scrapedData, platformData, crawlData, performanceData } = data;
+  const { platformData, crawlData, performanceData, churchSpecificResults } = data;
 
   return (
     <div className="container mx-auto p-4">
@@ -42,13 +42,6 @@ export default function Report() {
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Scraped Data</h2>
-          <pre className="bg-gray-100 p-4 rounded">
-            {JSON.stringify(scrapedData, null, 2)}
-          </pre>
-        </div>
-
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Platform Data</h2>
           <pre className="bg-gray-100 p-4 rounded">
@@ -80,6 +73,16 @@ export default function Report() {
           <div className="bg-gray-100 p-4 rounded">
             <p>Performance Score: {performanceData.performance}</p>
             <p>Accessibility Score: {performanceData.accessibility}</p>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Church Specific Data</h2>
+          <div className="bg-gray-100 p-4 rounded">
+            <p>Online Giving: {churchSpecificResults.onlineGiving ? 'Enabled' : 'Not Found'}</p>
+            <p>Event Calendar: {churchSpecificResults.eventCalendar ? 'Detected' : 'Not Found'}</p>
+            <p>Sermon Content: {churchSpecificResults.sermonContent ? 'Analyzed' : 'Not Found'}</p>
+            <p>Social Media: {churchSpecificResults.socialMedia ? 'Analyzed' : 'Not Found'}</p>
           </div>
         </div>
       </div>
