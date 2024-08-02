@@ -1,47 +1,16 @@
-import axios from "axios";
+import { analyzePlatform } from '../../utils/platform';
 
 export default async function handler(req, res) {
-  let { url } = req.query;
-
-  if (!url) {
-    return res.status(400).json({ error: "URL parameter is required" });
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Remove the protocol (http:// or https://) if present
-  url = url.replace(/^https?:\/\//, "");
+  const { url } = req.query;
 
   try {
-    const apiKey = process.env.WHATCMS_API_KEY; // Replace with your actual WhatCMS API key
-    const response = await axios.get(
-      `https://whatcms.org/API/Tech?key=${apiKey}&url=${url}`,
-    );
-
-    // Log the full response to inspect
-    console.log("WhatCMS API response:", response.data);
-
-    const results = response.data.results || [];
-    let cms = [];
-    let hosting = [];
-    let otherTechnologies = [];
-
-    // Categorize technologies into CMS and hosting
-    results.forEach((tech) => {
-      if (tech.categories.includes("CMS")) {
-        cms.push(tech);
-      } else if (tech.categories.includes("Hosting")) {
-        hosting.push(tech);
-      } else {
-        otherTechnologies.push(tech);
-      }
-    });
-
-    res.status(200).json({ cms, hosting, otherTechnologies });
+    const result = await analyzePlatform(url);
+    res.status(200).json(result);
   } catch (error) {
-    console.error(
-      "Error detecting technologies:",
-      error.message,
-      error.response?.data || error.stack,
-    );
-    res.status(500).json({ error: "Error detecting technologies" });
+    res.status(500).json({ error: error.message });
   }
 }
