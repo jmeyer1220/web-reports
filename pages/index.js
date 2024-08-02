@@ -110,6 +110,7 @@ export default function Analyze() {
     const [taskId, setTaskId] = useState(null);
     const [taskStatus, setTaskStatus] = useState(null);
     const [result, setResult] = useState(null);
+  };
   
     const startTask = async () => {
       const response = await axios.post('/api/startPageSpeedTask', { url });
