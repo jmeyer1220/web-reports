@@ -35,69 +35,68 @@ export default function Analyze() {
     setTrackingTags({});
     setCrawledUrls([]); // Reset crawled URLs
     setIsAnalyzed(false);
-
-  try {
-    // Step 1: Start the PageSpeed Insights Task
-    const startResponse = await axios.post("/api/startPageSpeedTask", { url });
-
-    if (startResponse.status !== 200) {
-      throw new Error("Failed to initiate PageSpeed Insights task");
-    }
-
-    const { taskId } = startResponse.data;
-
-    // Step 2: Poll for Task Completion
-    const pollTaskStatus = async (taskId) => {
-      const response = await axios.get("/api/checkTaskStatus", {
-        params: { taskId },
-      });
-
-      const { task } = response.data;
-      return task;
-    };
-
-    let task = null;
-    const interval = setInterval(async () => {
-      task = await pollTaskStatus(taskId);
-
-      if (task.status === "completed") {
-        clearInterval(interval);
-
-        // Step 3: Generate the Report
-        const generateResponse = await fetch("/api/reports/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ url, taskId }),
+    
+    try {
+      // Step 1: Start the PageSpeed Insights Task
+      const startResponse = await axios.post("/api/startPageSpeedTask", { url });
+  
+      if (startResponse.status !== 200) {
+        throw new Error("Failed to initiate PageSpeed Insights task");
+      }
+  
+      const { taskId } = startResponse.data;
+  
+      // Step 2: Poll for Task Completion
+      const pollTaskStatus = async (taskId) => {
+        const response = await axios.get("/api/checkTaskStatus", {
+          params: { taskId },
         });
-
-        const result = await generateResponse.json();
-
-        if (!generateResponse.ok) {
-          throw new Error(result.message || "Failed to generate report");
+  
+        const { task } = response.data;
+        return task;
+      };
+  
+      let task = null;
+      const interval = setInterval(async () => {
+        task = await pollTaskStatus(taskId);
+  
+        if (task.status === "completed") {
+          clearInterval(interval);
+  
+          // Step 3: Generate the Report
+          const generateResponse = await fetch("/api/reports/generate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url, taskId }),
+          });
+  
+          const result = await generateResponse.json();
+  
+          if (!generateResponse.ok) {
+            throw new Error(result.message || "Failed to generate report");
+          }
+  
+          setIsLoading(false);
+          router.push(`/report/${result.reportId}`);
         }
-
-        setIsLoading(false);
-        router.push(`/report/${result.reportId}`);
-      }
-    }, 5000); // Check every 5 seconds
-
-    // Set a timeout to handle cases where the task takes too long
-    setTimeout(() => {
-      if (task && task.status !== "completed") {
-        clearInterval(interval);
-        setIsLoading(false);
-        setError("The task is taking longer than expected. Please try again later.");
-      }
-    }, 60000); // Timeout after 60 seconds
-  } catch (err) {
-    console.error("Unexpected error:", err);
-    setError("Unexpected error occurred. Please try again.");
-    setIsLoading(false);
-  }
-};
-
+      }, 5000); // Check every 5 seconds
+  
+      // Set a timeout to handle cases where the task takes too long
+      setTimeout(() => {
+        if (task && task.status !== "completed") {
+          clearInterval(interval);
+          setIsLoading(false);
+          setError("The task is taking longer than expected. Please try again later.");
+        }
+      }, 60000); // Timeout after 60 seconds
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      setError("Unexpected error occurred. Please try again.");
+      setIsLoading(false);
+    }
+  };
 
   const ResultCard = ({ title, children }) => (
     <div className="bg-white p-4 rounded shadow-md mb-4">
