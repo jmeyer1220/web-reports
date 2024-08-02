@@ -21,7 +21,7 @@ export default function Analyze() {
   const [isLoading, setIsLoading] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const router = useRouter();
-  const [toastMessage, setToastMessage] = useState("Website analysis in progress...");
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,15 +46,17 @@ export default function Analyze() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, setToastMessage }),
       });
 
       const result = await response.json();
 
-      if (!response.ok) {
+      if (response.ok) {
+        setToastMessage("Analysis complete!");
+      } else {
+        setToastMessage("Analysis failed.");
         throw new Error(result.message || "Failed to generate report");
       }
-
       router.push(`/report/${result.reportId}`);
     } catch (err) {
       console.error("Unexpected error:", err);

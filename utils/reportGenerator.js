@@ -4,7 +4,7 @@ import { crawlWebsite } from './crawl';
 import { measurePerformance } from './performance';
 import performChurchSpecificAnalysis from './churchAnalysis';
 
-export async function generateReport(url) {
+export async function generateReport(url, setToastMessage) {
   //const scrapedData = await scrapeWebsite(url);
   setToastMessage("Measuring website performance...");
   const performanceData = await measurePerformance(url);
