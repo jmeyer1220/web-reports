@@ -1,7 +1,7 @@
-import analyzeOnlineGiving from './analyzeOnlineGiving';
-import detectEventCalendar from './detectEventCalendar';
-import analyzeSermonContent from './analyzeSermonContent';
-import analyzeSocialMedia from './analyzeSocialMedia';
+import analyzeOnlineGiving from './onlineGiving';
+import detectEventCalendar from './eventCalendar';
+import analyzeSermonContent from './sermonsLiveStreaming';
+import analyzeSocialMedia from './socialMedia';
 
 async function performChurchSpecificAnalysis(url) {
   const [onlineGiving, eventCalendar, sermonContent, socialMedia] = await Promise.all([
