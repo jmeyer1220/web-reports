@@ -7,14 +7,14 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { url, setToastMessage} = req.body;
+  const { url} = req.body;
   if (!url) {
     res.status(400).json({ message: "URL is required" });
     return;
   }
 
   try {
-    const reportData = await generateReport(url, setToastMessage);
+    const reportData = await generateReport(url);
 
     const { data, error } = await supabase
       .from("reports")

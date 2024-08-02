@@ -4,15 +4,15 @@ import { crawlWebsite } from './crawl';
 import { measurePerformance } from './performance';
 import performChurchSpecificAnalysis from './churchAnalysis';
 
-export async function generateReport(url, setToastMessage) {
+
+
+export async function generateReport(url) {
   //const scrapedData = await scrapeWebsite(url);
-  setToastMessage("Measuring website performance...");
+  sendProgress("Measuring website performance...");
   const performanceData = await measurePerformance(url);
-  setToastMessage("Analyzing website platform...");
+  sendProgress("Analyzing website platform...");
   const platformData = await analyzePlatform(url);
-  setToastMessage("Crawling website...");
   const crawlData = await crawlWebsite(url);
-  setToastMessage("Performing website analysis...");
   const churchSpecificResults = await performChurchSpecificAnalysis(url);
 
 
