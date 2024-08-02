@@ -51,4 +51,21 @@ export async function measurePerformance(targetUrl) {
     // Log the Lighthouse response to inspect
     console.log('Lighthouse runner result:', runnerResult);
 
-    const performance = runnerResult.l
+    const performance = runnerResult.lhr.categories.performance.score * 100;
+    console.log('Lighthouse performance score:', performance);
+
+    await chrome.kill();
+    return { performance };
+  } catch (error) {
+    console.error('Error fetching performance stats:', error.message, error.response?.data || error.stack);
+
+    // Ensure Chrome process is killed in case of an error
+    try {
+      await chrome.kill();
+    } catch (killError) {
+      console.error('Error killing Chrome:', killError.message);
+    }
+
+    throw new Error('Error fetching performance stats');
+  }
+}
