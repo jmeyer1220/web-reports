@@ -2,7 +2,7 @@
 import { analyzePlatform } from './platform';
 import { crawlWebsite } from './crawl';
 import { measurePerformance } from './performance';
-import performChurchSpecificAnalysis from '../../utils/churchSpecificAnalysis';
+import performChurchSpecificAnalysis from './utils/churchAnalysis';
 
 export async function generateReport(url) {
   //const scrapedData = await scrapeWebsite(url);
