@@ -6,13 +6,13 @@ import performChurchSpecificAnalysis from './churchAnalysis';
 
 export async function generateReport(url) {
   //const scrapedData = await scrapeWebsite(url);
-  updateToastMessage("Measuring website performance...");
+  setToastMessage("Measuring website performance...");
   const performanceData = await measurePerformance(url);
-  updateToastMessage("Analyzing website platform...");
+  setToastMessage("Analyzing website platform...");
   const platformData = await analyzePlatform(url);
-  updateToastMessage("Crawling website...");
+  setToastMessage("Crawling website...");
   const crawlData = await crawlWebsite(url);
-  updateToastMessage("Performing website analysis...");
+  setToastMessage("Performing website analysis...");
   const churchSpecificResults = await performChurchSpecificAnalysis(url);
 
 
