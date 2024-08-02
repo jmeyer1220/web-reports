@@ -6,9 +6,9 @@ import performChurchSpecificAnalysis from './churchAnalysis';
 
 export async function generateReport(url) {
   //const scrapedData = await scrapeWebsite(url);
+  const performanceData = await measurePerformance(url);
   const platformData = await analyzePlatform(url);
   const crawlData = await crawlWebsite(url);
-  const performanceData = await measurePerformance(url);
   const churchSpecificResults = await performChurchSpecificAnalysis(url);
 
 

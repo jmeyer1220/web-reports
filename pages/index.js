@@ -35,68 +35,28 @@ export default function Analyze() {
     setTrackingTags({});
     setCrawledUrls([]); // Reset crawled URLs
     setIsAnalyzed(false);
-    
     try {
-      // Step 1: Start the PageSpeed Insights Task
-      const startResponse = await axios.post("/api/startPageSpeedTask", { url });
-  
-      if (startResponse.status !== 200) {
-        throw new Error("Failed to initiate PageSpeed Insights task");
+      const response = await fetch("/api/reports/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to generate report");
       }
-  
-      const { taskId } = startResponse.data;
-  
-      // Step 2: Poll for Task Completion
-      const pollTaskStatus = async (taskId) => {
-        const response = await axios.get("/api/checkTaskStatus", {
-          params: { taskId },
-        });
-  
-        const { task } = response.data;
-        return task;
-      };
-  
-      let task = null;
-      const interval = setInterval(async () => {
-        task = await pollTaskStatus(taskId);
-  
-        if (task.status === "completed") {
-          clearInterval(interval);
-  
-          // Step 3: Generate the Report
-          const generateResponse = await fetch("/api/reports/generate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ url, taskId }),
-          });
-  
-          const result = await generateResponse.json();
-  
-          if (!generateResponse.ok) {
-            throw new Error(result.message || "Failed to generate report");
-          }
-  
-          setIsLoading(false);
-          router.push(`/report/${result.reportId}`);
-        }
-      }, 5000); // Check every 5 seconds
-  
-      // Set a timeout to handle cases where the task takes too long
-      setTimeout(() => {
-        if (task && task.status !== "completed") {
-          clearInterval(interval);
-          setIsLoading(false);
-          setError("The task is taking longer than expected. Please try again later.");
-        }
-      }, 60000); // Timeout after 60 seconds
+
+      router.push(`/report/${result.reportId}`);
     } catch (err) {
       console.error("Unexpected error:", err);
       setError("Unexpected error occurred. Please try again.");
-      setIsLoading(false);
     }
   };
+
 
   const ResultCard = ({ title, children }) => (
     <div className="bg-white p-4 rounded shadow-md mb-4">
@@ -104,36 +64,6 @@ export default function Analyze() {
       {children}
     </div>
   );
-
-  const PageSpeedChecker = () => {
-    const [url, setUrl] = useState('');
-    const [taskId, setTaskId] = useState(null);
-    const [taskStatus, setTaskStatus] = useState(null);
-    const [result, setResult] = useState(null);
-  };
-  
-    const startTask = async () => {
-      const response = await axios.post('/api/startPageSpeedTask', { url });
-      setTaskId(response.data.taskId);
-      setTaskStatus('pending');
-      checkTaskStatus(response.data.taskId);
-    };
-  
-    const checkTaskStatus = async (taskId) => {
-      const interval = setInterval(async () => {
-        const response = await axios.get('/api/checkTaskStatus', {
-          params: { taskId },
-        });
-        const task = response.data.task;
-        setTaskStatus(task.status);
-  
-        if (task.status === 'completed') {
-          setResult(task.result);
-          clearInterval(interval);
-        }
-      }, 5000); // Check every 5 seconds
-    };
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-slate-200">
