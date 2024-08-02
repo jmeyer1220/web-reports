@@ -36,55 +36,27 @@ export default function Analyze() {
     setCrawledUrls([]); // Reset crawled URLs
     setIsAnalyzed(false);
     try {
-      // Fetch page analysis data
-      const pageAnalysisResponse = await axios.get(`/api/crawl?url=${url}`);
-      const pageData = pageAnalysisResponse.data;
-      if (pageData.error) {
-        throw new Error(pageData.error);
+      const response = await fetch("/api/reports/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to generate report");
       }
-      setPageCount(pageData.pageCount || 0);
-      setContentTypes(pageData.contentTypes || {});
-      setContentTypeBreakdown(pageData.contentTypeBreakdown || {});
-      setTrackingTags(pageData.trackingTags || {});
-      setCrawledUrls(pageData.crawledUrls || []); // Set crawled URLs
-      console.log("Current crawled URLs:", crawledUrls);
 
-      // Fetch technologies
-      const technologiesResponse = await axios.get(`/api/platform?url=${url}`);
-      const techData = technologiesResponse.data;
-      setCms(techData.cms || []);
-      setHosting(techData.hosting || []);
-      setOtherTechnologies(techData.otherTechnologies || []);
-      setIsAnalyzed(true);
-      setIsLoading(false); // Add this line
+      router.push(`/report/${result.reportId}`);
     } catch (err) {
-      console.error(
-        "Error fetching data:",
-        err.response?.data || err.message,
-        err.stack,
-      );
-      setError("Error fetching data. Check the console for more details.");
+      console.error("Unexpected error:", err);
+      setError("Unexpected error occurred. Please try again.");
     }
   };
 
-  const handleScrape = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setContent(null);
-
-    try {
-      // Fetch content
-      const contentResponse = await axios.get(`/api/scrape?url=${url}`);
-      setContent(contentResponse.data.content);
-    } catch (err) {
-      console.error(
-        "Error scraping content:",
-        err.response?.data || err.message,
-        err.stack,
-      );
-      setError("Error scraping content. Check the console for more details.");
-    }
-  };
 
   const ResultCard = ({ title, children }) => (
     <div className="bg-white p-4 rounded shadow-md mb-4">
