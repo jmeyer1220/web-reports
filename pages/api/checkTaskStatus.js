@@ -1,6 +1,6 @@
 // /pages/api/checkTaskStatus.js
 
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../supabase/index';
 
 export default async function handler(req, res) {
   const { taskId } = req.query;

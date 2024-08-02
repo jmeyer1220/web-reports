@@ -1,6 +1,6 @@
 // /pages/api/processPageSpeedTask.js
 
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../supabase/index';
 import axios from 'axios';
 
 export default async function handler(req, res) {
