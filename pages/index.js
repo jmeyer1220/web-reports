@@ -3,6 +3,7 @@ import axios from "axios";
 import URLListHovercard from "../components/ui/hovercard";
 import ToastNotification from "../components/ui/toastNotification";
 import LoadingSkeleton from "../components/ui/skeleton";
+import { useRouter } from "next/router";
 
 export default function Analyze() {
   const [url, setUrl] = useState("");
@@ -22,6 +23,7 @@ export default function Analyze() {
   const [toastOpen, setToastOpen] = useState(false);
   const router = useRouter();
   const [toastMessage, setToastMessage] = useState("Website analysis in progress...");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
