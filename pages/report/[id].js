@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import LoadingSkeleton from "../components/ui/skeleton";
+import LoadingSkeleton from "../../components/ui/skeleton";
 
 const BentoBox = ({ title, children }) => (
   <div className="bg-white shadow-lg rounded-lg p-4">
