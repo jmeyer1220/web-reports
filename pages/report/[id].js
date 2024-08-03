@@ -108,7 +108,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-8 row-span-3">
+        <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-6 row-span-3">
           <p>Total Links: {crawlData.pageCount}</p>
           <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
           <div className="h-64 mt-4">
