@@ -6,7 +6,7 @@ import LoadingSkeleton from "../../components/ui/skeleton";
 import { Check, X, Calendar, Video, DollarSign, Share2 } from 'lucide-react';
 
 const BentoBox = ({ title, children, className }) => (
-  <div {className}>
+  <div className={className} >
     <h2 className="text-xl font-semibold mb-2">{title}</h2>
     {children}
   </div>
