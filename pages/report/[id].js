@@ -111,7 +111,7 @@ export default function Report() {
         <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-6 row-span-6">
           <p>Total Links: {crawlData.pageCount}</p>
           <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
-          <div className="h-1/2 mt-4">
+          <div className="h-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
