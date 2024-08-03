@@ -3,12 +3,21 @@ import { useEffect, useState } from "react";
 import supabase from "../../supabase";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import LoadingSkeleton from "../../components/ui/skeleton";
+import { Check, X, Calendar, Video, DollarSign, Share2 } from 'lucide-react';
 
 const BentoBox = ({ title, children }) => (
   <div className="bg-white shadow-lg rounded-lg p-4">
     <h2 className="text-xl font-semibold mb-2">{title}</h2>
     {children}
   </div>
+);
+
+const StatusIcon = ({ status }) => (
+  status ? (
+    <Check className="w-6 h-6 text-green-500" />
+  ) : (
+    <X className="w-6 h-6 text-red-500" />
+  )
 );
 
 export default function Report() {
@@ -47,6 +56,8 @@ export default function Report() {
     value,
   }));
 
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">{url}</h1>
@@ -54,6 +65,19 @@ export default function Report() {
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <BentoBox title="Performance Data" className="md:col-span-2 lg:col-span-3">
+          <div className="flex justify-around">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-green-500">{performanceData.performance}</div>
+              <div className="text-sm text-gray-500">Performance Score</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-500">{performanceData.accessibility}</div>
+              <div className="text-sm text-gray-500">Accessibility Score</div>
+            </div>
+          </div>
+        </BentoBox>
+
         <BentoBox title="Platform Data">
           <div className="space-y-2">
             <h3 className="font-semibold">CMS:</h3>
@@ -76,36 +100,81 @@ export default function Report() {
             </ul>
           </div>
         </BentoBox>
+
         <BentoBox title="Crawl Data">
-          <div className="space-y-2">
-            <p>Total Links: {crawlData.pageCount}</p>
-            <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
-          </div>
+          <p>Total Links: {crawlData.pageCount}</p>
+          <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
           <div className="h-64 mt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={contentTypeData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8884d8" />
-              </BarChart>
+              <PieChart>
+                <Pie
+                  data={contentTypeData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                >
+                  {contentTypeData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </BentoBox>
-        <BentoBox title="Performance Data">
-          <div className="space-y-2">
-            <p>Performance Score: {performanceData.performance}</p>
-            <p>Accessibility Score: {performanceData.accessibility}</p>
+
+        <BentoBox title="Online Giving">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <DollarSign className="w-8 h-8 text-blue-500 mr-2" />
+              <span className="font-semibold">Online Giving</span>
+            </div>
+            <StatusIcon status={churchSpecificResults.onlineGiving} />
           </div>
+          <p className="mt-2 text-sm text-gray-600">
+            {churchSpecificResults.onlineGiving ? 'Enabled' : 'Not Found'}
+          </p>
         </BentoBox>
-        <BentoBox title="Church Specific Data">
-          <div className="space-y-2">
-            <p>Online Giving: {churchSpecificResults.onlineGiving ? 'Enabled' : 'Not Found'}</p>
-            <p>Event Calendar: {churchSpecificResults.eventCalendar ? 'Detected' : 'Not Found'}</p>
-            <p>Sermon Content: {churchSpecificResults.sermonContent ? 'Analyzed' : 'Not Found'}</p>
-            <p>Social Media: {churchSpecificResults.socialMedia ? 'Analyzed' : 'Not Found'}</p>
+
+        <BentoBox title="Event Calendar">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Calendar className="w-8 h-8 text-blue-500 mr-2" />
+              <span className="font-semibold">Event Calendar</span>
+            </div>
+            <StatusIcon status={churchSpecificResults.eventCalendar} />
           </div>
+          <p className="mt-2 text-sm text-gray-600">
+            {churchSpecificResults.eventCalendar ? 'Detected' : 'Not Found'}
+          </p>
+        </BentoBox>
+
+        <BentoBox title="Livestreaming">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Video className="w-8 h-8 text-blue-500 mr-2" />
+              <span className="font-semibold">Livestreaming</span>
+            </div>
+            <StatusIcon status={churchSpecificResults.sermonContent} />
+          </div>
+          <p className="mt-2 text-sm text-gray-600">
+            {churchSpecificResults.sermonContent ? 'Analyzed' : 'Not Found'}
+          </p>
+        </BentoBox>
+
+        <BentoBox title="Social Media Presence">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Share2 className="w-8 h-8 text-blue-500 mr-2" />
+              <span className="font-semibold">Social Media</span>
+            </div>
+            <StatusIcon status={churchSpecificResults.socialMedia} />
+          </div>
+          <p className="mt-2 text-sm text-gray-600">
+            {churchSpecificResults.socialMedia ? 'Analyzed' : 'Not Found'}
+          </p>
         </BentoBox>
       </div>
     </div>
