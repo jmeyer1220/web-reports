@@ -118,7 +118,7 @@ export default function Report() {
                   data={contentTypeData}
                   cx="50%"
                   cy="50%"
-                  outerRadius={80}
+                  outerRadius={240}
                   fill="#8884d8"
                   dataKey="value"
                   label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
