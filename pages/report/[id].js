@@ -59,7 +59,7 @@ export default function Report() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
-    <div className="container mx-auto p-4 bg-slate-100">
+    <div className="min-h-screen container mx-auto my-auto p-4 bg-slate-200">
       <h1 className="text-3xl font-bold mb-4">{url}</h1>
       <p className="text-gray-600 mb-8">
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
