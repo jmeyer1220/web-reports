@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import supabase from "../../supabase";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {  PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import LoadingSkeleton from "../../components/ui/skeleton";
 import { Check, X, Calendar, Video, DollarSign, Share2 } from 'lucide-react';
 
