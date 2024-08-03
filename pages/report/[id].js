@@ -64,7 +64,7 @@ export default function Report() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
-    <div className="min-h-screen container mx-auto my-auto p-4 bg-slate-200">
+    <div className="min-h-screen mx-auto my-auto p-4 bg-slate-200">
     <div className="grid grid-cols-12 gap-4">
     <BentoBox className="bg-white shadow-lg rounded-lg p-4 md:col-span-12 lg:col-span-12">
       <h1 className="text-3xl font-bold mb-4">{url}</h1>
@@ -72,7 +72,7 @@ export default function Report() {
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
       </p>
       </BentoBox>
-        <BentoBox title="Performance Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-4 row-start-2">
+        <BentoBox title="Performance Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-6 row-span-2">
           <div className="flex justify-around">
             <div className="text-center">
               <div className="text-4xl font-bold text-green-500">{performanceData.performance}</div>
@@ -85,7 +85,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Platform Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-4">
+        <BentoBox title="Platform Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-6 row-start-3">
           <div className="space-y-2">
             <h3 className="font-semibold">CMS:</h3>
             <ul className="list-disc list-inside">
@@ -108,7 +108,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-12 lg:col-span-8 row-span-2">
+        <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-8 row-span-3">
           <p>Total Links: {crawlData.pageCount}</p>
           <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
           <div className="h-64 mt-4">
