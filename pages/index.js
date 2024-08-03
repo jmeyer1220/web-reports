@@ -3,6 +3,7 @@ import axios from "axios";
 import URLListHovercard from "../components/ui/hovercard";
 import ToastNotification from "../components/ui/toastNotification";
 import LoadingSkeleton from "../components/ui/skeleton";
+import { useRouter } from "next/router";
 
 export default function Analyze() {
   const [url, setUrl] = useState("");
