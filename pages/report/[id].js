@@ -5,8 +5,8 @@ import {  PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import LoadingSkeleton from "../../components/ui/skeleton";
 import { Check, X, Calendar, Video, DollarSign, Share2 } from 'lucide-react';
 
-const BentoBox = ({ title, children }) => (
-  <div className="bg-white shadow-lg rounded-lg p-4">
+const BentoBox = ({ title, children, className }) => (
+  <div {className}>
     <h2 className="text-xl font-semibold mb-2">{title}</h2>
     {children}
   </div>
@@ -65,7 +65,7 @@ export default function Report() {
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
       </p>
       <div className="grid grid-cols-12 gap-4">
-        <BentoBox title="Performance Data" className="md:col-span-6 lg:col-span-4 row-start-2">
+        <BentoBox title="Performance Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-4 row-start-2">
           <div className="flex justify-around">
             <div className="text-center">
               <div className="text-4xl font-bold text-green-500">{performanceData.performance}</div>
@@ -78,7 +78,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Platform Data" className="md:col-span-6 lg:col-span-4">
+        <BentoBox title="Platform Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-4">
           <div className="space-y-2">
             <h3 className="font-semibold">CMS:</h3>
             <ul className="list-disc list-inside">
@@ -101,7 +101,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Crawl Data" className="md:col-span-12 lg:col-span-8 row-span-2">
+        <BentoBox title="Crawl Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-12 lg:col-span-8 row-span-2">
           <p>Total Links: {crawlData.pageCount}</p>
           <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
           <div className="h-64 mt-4">
@@ -125,7 +125,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Online Giving">
+        <BentoBox title="Online Giving" className="bg-white shadow-lg rounded-lg p-4 col-span-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <DollarSign className="w-8 h-8 text-blue-500 mr-2" />
@@ -138,7 +138,7 @@ export default function Report() {
           </p>
         </BentoBox>
 
-        <BentoBox title="Event Calendar">
+        <BentoBox title="Event Calendar" className="bg-white shadow-lg rounded-lg p-4 col-span-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Calendar className="w-8 h-8 text-blue-500 mr-2" />
@@ -151,7 +151,7 @@ export default function Report() {
           </p>
         </BentoBox>
 
-        <BentoBox title="Livestreaming">
+        <BentoBox title="Livestreaming" className="bg-white shadow-lg rounded-lg p-4 col-span-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Video className="w-8 h-8 text-blue-500 mr-2" />
@@ -164,7 +164,7 @@ export default function Report() {
           </p>
         </BentoBox>
 
-        <BentoBox title="Social Media Presence">
+        <BentoBox title="Social Media Presence" className="bg-white shadow-lg rounded-lg p-4 col-span-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Share2 className="w-8 h-8 text-blue-500 mr-2" />
