@@ -20,6 +20,10 @@ const StatusIcon = ({ status }) => (
   )
 );
 
+const stripProtocol = (url) => {
+  return url.replace(/^https?:\/\//, '');
+};
+
 export default function Report() {
   const router = useRouter();
   const { id } = router.query;
@@ -56,15 +60,18 @@ export default function Report() {
     value,
   }));
 
+  const strippedUrl = stripProtocol(url);
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
     <div className="min-h-screen container mx-auto my-auto p-4 bg-slate-200">
+    <div className="grid grid-cols-12 gap-4">
+    <BentoBox className="bg-white shadow-lg rounded-lg p-4 md:col-span-12 lg:col-span-12">
       <h1 className="text-3xl font-bold mb-4">{url}</h1>
       <p className="text-gray-600 mb-8">
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
       </p>
-      <div className="grid grid-cols-12 gap-4">
+      </BentoBox>
         <BentoBox title="Performance Data" className="bg-white shadow-lg rounded-lg p-4 md:col-span-6 lg:col-span-4 row-start-2">
           <div className="flex justify-around">
             <div className="text-center">
