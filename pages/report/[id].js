@@ -59,13 +59,13 @@ export default function Report() {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 bg-slate-100">
       <h1 className="text-3xl font-bold mb-4">{url}</h1>
       <p className="text-gray-600 mb-8">
         Analyzed at: {new Date(analyzed_at).toLocaleString()}
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <BentoBox title="Performance Data" className="md:col-span-2 lg:col-span-3">
+      <div className="grid grid-cols-12 gap-4">
+        <BentoBox title="Performance Data" className="md:col-span-6 lg:col-span-4 row-start-2">
           <div className="flex justify-around">
             <div className="text-center">
               <div className="text-4xl font-bold text-green-500">{performanceData.performance}</div>
@@ -78,7 +78,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Platform Data">
+        <BentoBox title="Platform Data" className="md:col-span-6 lg:col-span-4">
           <div className="space-y-2">
             <h3 className="font-semibold">CMS:</h3>
             <ul className="list-disc list-inside">
@@ -101,7 +101,7 @@ export default function Report() {
           </div>
         </BentoBox>
 
-        <BentoBox title="Crawl Data">
+        <BentoBox title="Crawl Data" className="md:col-span-12 lg:col-span-8 row-span-2">
           <p>Total Links: {crawlData.pageCount}</p>
           <p>Tracking Tags Detected: {Object.keys(crawlData.trackingTags).length}</p>
           <div className="h-64 mt-4">
